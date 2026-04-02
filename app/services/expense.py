@@ -15,9 +15,6 @@ def post_expense(item: ExpenseModel, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_item)
     return db_item
-@app.get('/expenses', response_model=ResponseModel)
-def get_expense(item: ExpenseModel, db: Session = Depends(get_db)):
-    db_item = db.query(Expense).all()
-    if db_item is None:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return db_item
+@app.get('/expenses', response_model=list([ResponseModel]))
+def get_expense(db: Session = Depends(get_db)):
+    return db.query(Expense).all()
